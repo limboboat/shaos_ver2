@@ -74,62 +74,50 @@ void CPlayer::MSG_Key(UINT message, WPARAM wParam)
 			(immotal) ? immotal = FALSE : immotal = TRUE;
 			break;
 		case 'A':
-			L_On = TRUE;
+			keyInform.A_Key = TRUE;
 			break;
 		case 'D':
-			R_On = TRUE;
+			keyInform.D_Key = TRUE;
 			break;
 		case 'S':
-			D_On = TRUE;
+			keyInform.S_Key = TRUE;
 			break;
 		case 'W':
-			U_On = TRUE;
+			keyInform.W_Key = TRUE;
 			break;
 		case VK_SHIFT:
-			if (!cooltime_Shoot && !pressSft) {
-				pressSft = TRUE;
-			}
+			keyInform.Sft_Key = TRUE;
 			break;
 		case VK_SPACE:
-			if (!cooltime_AoE) {
-				Skill_AreaOfEffect();
-			}
+			keyInform.SPACE_KEY = TRUE;
 			break;
 		case 'Q':
-			if (!pressQ && !cooltime_Return) {
-				pressQ = TRUE;
-				ReturnHome();				
-			}
+			keyInform.Q_Key = TRUE;
 			break;
 		case 'V':
-			if (!cooltime_Shield) {
-				ActiveShield();
-			}
+			keyInform.V_Key = TRUE;
 		}
 		break;
 	case WM_KEYUP:
 		switch (wParam)
 		{
 		case 'A':
-			L_On = FALSE;
+			keyInform.A_Key = FALSE;
 			break;
 		case 'D':
-			R_On = FALSE;
+			keyInform.D_Key = FALSE;
 			break;
 		case 'S':
-			D_On = FALSE;
+			keyInform.S_Key = FALSE;
 			break;
 		case 'W':
-			U_On = FALSE;
+			keyInform.W_Key = FALSE;
 			break;
 		case VK_SHIFT:
-			pressSft = FALSE;
+			keyInform.Sft_Key = FALSE;
 			break;
 		case 'Q':
-			if (pressQ) {
-				pressQ = FALSE;
-				castingtime_return = 0;
-			}
+			keyInform.Q_Key = FALSE;
 			break;
 		}
 		break;
@@ -139,8 +127,8 @@ void CPlayer::MSG_Key(UINT message, WPARAM wParam)
 
 void CPlayer::MSG_MouseMove(POINT mousepos)
 {
-	worldmousepos = mousepos;
-
+	keyInform.mousepos_x = mousepos.x;
+	keyInform.mousepos_y = mousepos.y;
 }
 
 void CPlayer::MSG_MouseUp(POINT mousepos)
@@ -148,34 +136,7 @@ void CPlayer::MSG_MouseUp(POINT mousepos)
 }
 void CPlayer::MSG_MouseDown(POINT mousepos)
 {
-	if (pressSft) {
-		Skill_Shoot();
-		pressSft = FALSE;
-		return;
-	}
-
-	CGameObject* tmp = nullptr;
-	while (tmp != menemylist) {
-		if (!tmp) tmp = menemylist;
-
-		if (tmp->IsDead()) {
-			tmp = tmp->next;
-			continue;
-		}
-		const RECT rect = tmp->GetRng();
-		if (PtInRect(&rect, mousepos)) {
-			float dx = mptpos.x - tmp->GetPos().x;
-			float dy = mptpos.y - tmp->GetPos().y;
-
-			float center_d = dx * dx + dy * dy;
-			float range = PLAYER_ATTACK_RANGE + tmp->GetObjRadius();
-			if (center_d <= range * range) {
-				ptarget = tmp;
-				return;
-			}
-		}
-		tmp = tmp->next;
-	}
+	keyInform.mouse_Down = TRUE;
 }
 
 
@@ -190,8 +151,6 @@ void CPlayer::Move() {
 		}
 
 	}
-
-
 	// 플레이어 중심점 좌표
 	POINTFLOAT dirvector = this->Player_Vector();
 
@@ -526,7 +485,6 @@ void CPlayer::Draw(HDC hdc)
 		SelectObject(hdc, hOld);
 	}
 
-
 	if (effecttime_AoE) {
 		// 광역기 이펙트 그리기
 
@@ -697,119 +655,119 @@ void CPlayer::Draw(HDC hdc)
 void CPlayer::Update()
 {
 
-	// 죽음
-	if (ideatheffecttime) {
-		if (ideatheffecttime == PLAYER_EFFECTTIME_DEATH) {
-		}
+	//// 죽음
+	//if (ideatheffecttime) {
+	//	if (ideatheffecttime == PLAYER_EFFECTTIME_DEATH) {
+	//	}
 
-		ideatheffecttime -= FRAMETIME;
-		if (!ideatheffecttime) {
-			SetPos(PLAYER_DEFAULT_POSITION);
-			mhp->SetHp(PLAYER_MAXHP);
-			mdeath = FALSE;
-		}
-		return;	// 죽었으면 업데이트 멈추기
-	}
+	//	ideatheffecttime -= FRAMETIME;
+	//	if (!ideatheffecttime) {
+	//		SetPos(PLAYER_DEFAULT_POSITION);
+	//		mhp->SetHp(PLAYER_MAXHP);
+	//		mdeath = FALSE;
+	//	}
+	//	return;	// 죽었으면 업데이트 멈추기
+	//}
 
 
 	// 플레이어 움직임
 	Move();
 
-	// 기지에 있으면 체력 회복
-	if (mrcRng.left <= 650) {
-		mhp->AddHp(RECOVERAMOUNT);
-	}
+	//// 기지에 있으면 체력 회복
+	//if (mrcRng.left <= 650) {
+	//	mhp->AddHp(RECOVERAMOUNT);
+	//}
 
 
-	if (effecttime_Shoot) effecttime_Shoot -= FRAMETIME;
-	if (effecttime_AoE) effecttime_AoE -= FRAMETIME;
+	//if (effecttime_Shoot) effecttime_Shoot -= FRAMETIME;
+	//if (effecttime_AoE) effecttime_AoE -= FRAMETIME;
 
-	if (effecttime_Return) {
-		effecttime_Return -= FRAMETIME;
-		if (!effecttime_Return)
-		{
-			SetPos(PLAYER_DEFAULT_POSITION);
-		}
-	}
+	//if (effecttime_Return) {
+	//	effecttime_Return -= FRAMETIME;
+	//	if (!effecttime_Return)
+	//	{
+	//		SetPos(PLAYER_DEFAULT_POSITION);
+	//	}
+	//}
 
-	if (pressQ) {
-		if (castingtime_return == 0)
-		{
-			cooltime_Return = COOLTIME_RETURN;
-			effecttime_Return = FRAMETIME * 50;
-			msound->MyPlaySound(3, 3);
-			pressQ = FALSE;
-		}
-		castingtime_return -= FRAMETIME;
-	}
+	//if (pressQ) {
+	//	if (castingtime_return == 0)
+	//	{
+	//		cooltime_Return = COOLTIME_RETURN;
+	//		effecttime_Return = FRAMETIME * 50;
+	//		msound->MyPlaySound(3, 3);
+	//		pressQ = FALSE;
+	//	}
+	//	castingtime_return -= FRAMETIME;
+	//}
 
-	if (onshield) {
-		if (activetime_shield == 0) {
-			//msound->MyPlaySound(9, 3);
-			onshield = FALSE;
-		}
-		activetime_shield -= FRAMETIME;
-	}
+	//if (onshield) {
+	//	if (activetime_shield == 0) {
+	//		//msound->MyPlaySound(9, 3);
+	//		onshield = FALSE;
+	//	}
+	//	activetime_shield -= FRAMETIME;
+	//}
 
 
-	// 쿨타임이 0이 아닐 때 감소
-	if (cooltime_Shoot) {
-		cooltime_Shoot -= FRAMETIME;
-		if (!cooltime_Shoot) {
-			msound->MyPlaySound(4, 3);
-			// 쿨타임 끝~
-		}
-	}
-	if (cooltime_AoE) {
-		cooltime_AoE -= FRAMETIME;
-		if (!cooltime_AoE) {
-			msound->MyPlaySound(4, 3);
-		}
-	}
-	if (cooltime_Shield)
-	{
-		cooltime_Shield -= FRAMETIME;
-		if (!cooltime_Shield) {
-			msound->MyPlaySound(4, 3);
-		}
-	}
-	if (cooltime_Return)
-	{
-		cooltime_Return -= FRAMETIME;
-		if (!cooltime_Return) {
-			msound->MyPlaySound(4, 3);
-		}
-	}
-			
+	//// 쿨타임이 0이 아닐 때 감소
+	//if (cooltime_Shoot) {
+	//	cooltime_Shoot -= FRAMETIME;
+	//	if (!cooltime_Shoot) {
+	//		msound->MyPlaySound(4, 3);
+	//		// 쿨타임 끝~
+	//	}
+	//}
+	//if (cooltime_AoE) {
+	//	cooltime_AoE -= FRAMETIME;
+	//	if (!cooltime_AoE) {
+	//		msound->MyPlaySound(4, 3);
+	//	}
+	//}
+	//if (cooltime_Shield)
+	//{
+	//	cooltime_Shield -= FRAMETIME;
+	//	if (!cooltime_Shield) {
+	//		msound->MyPlaySound(4, 3);
+	//	}
+	//}
+	//if (cooltime_Return)
+	//{
+	//	cooltime_Return -= FRAMETIME;
+	//	if (!cooltime_Return) {
+	//		msound->MyPlaySound(4, 3);
+	//	}
+	//}
+	//		
 
-	if (iattackcooltime)
-		iattackcooltime -= FRAMETIME;
-	else {
-		if (Attack())
-			iattackcooltime = FRAMETIME * 50;
-	}
+	//if (iattackcooltime)
+	//	iattackcooltime -= FRAMETIME;
+	//else {
+	//	if (Attack())
+	//		iattackcooltime = FRAMETIME * 50;
+	//}
 
-	if (pbullet) pbullet = pbullet->Move();
+	//if (pbullet) pbullet = pbullet->Move();
 
-	if (ptarget) {
-		if (ptarget->IsDead()) {		// 내 공격으로 죽었을 때
-			ptarget = nullptr;
-			return;
-		}
+	//if (ptarget) {
+	//	if (ptarget->IsDead()) {		// 내 공격으로 죽었을 때
+	//		ptarget = nullptr;
+	//		return;
+	//	}
 
-		// 플레이어 공격 범위에서 벗어났을 때
-		float dx = mptpos.x - ptarget->GetPos().x;
-		float dy = mptpos.y - ptarget->GetPos().y;
+	//	// 플레이어 공격 범위에서 벗어났을 때
+	//	float dx = mptpos.x - ptarget->GetPos().x;
+	//	float dy = mptpos.y - ptarget->GetPos().y;
 
-		float center_d = dx * dx + dy * dy;
-		float range = PLAYER_ATTACK_RANGE + ptarget->GetObjRadius();
-		if (center_d > range * range) {
-			ptarget = nullptr;
-			return;
-		}
+	//	float center_d = dx * dx + dy * dy;
+	//	float range = PLAYER_ATTACK_RANGE + ptarget->GetObjRadius();
+	//	if (center_d > range * range) {
+	//		ptarget = nullptr;
+	//		return;
+	//	}
 
-	}
-	return;
+	//}
+	//return;
 }
 
 void CPlayer::Death()

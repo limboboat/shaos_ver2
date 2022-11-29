@@ -29,13 +29,55 @@ const RECT BUTTONPAUSE_RNG = { CLIENT_WIDTH - 50, 10,CLIENT_WIDTH - 10, 50 };
 #define PAUSEBUTTONSIZE 40
 #define SKILLICONSIZE 40
 
-struct key_input
+//전송 및 갱신 정보
+struct io_information
 {
 	bool W_Key = false;
 	bool A_Key = false;
 	bool S_Key = false;
 	bool D_Key = false;
-};
+
+	bool V_Key = false;
+	bool Q_Key =false;
+	bool Sft_Key=false;
+	bool SPACE_KEY = false;
+
+	bool onshield=false;
+
+	long mousepos_x;
+	long mousepos_y;
+
+	bool mouse_Down = false;
+}keyInform;
+
+struct player_information {
+	bool		isDead = false;
+	float		posX;
+	float		posY;
+}playerInform;
+
+//갱신 정보
+struct player_update_information {
+	unsigned int castingtime_return = 0;
+	unsigned int activetime_shield = 0;
+
+	unsigned int effecttime_AoE = 0;
+	unsigned int effecttime_Shoot = 0;
+	unsigned int effecttime_Return = 0;
+
+	unsigned int cooltime_Shoot = 0;
+	unsigned int cooltime_AoE = 0;
+	unsigned int cooltime_Shield = 0;
+	unsigned int cooltime_Return = 0;
+	unsigned int cooltime_Death = 0;
+
+	int hp;
+	long mrchpbarLeft = 0;
+	long mrchpbarTop = 0;
+	long mrchpbarRight = 0;
+	long mrchpbarBottom = 0;
+}playerUpdateInform;
+
 
 
 const HBRUSH hUIBARBRUSH = CreateSolidBrush(RGB(102, 153, 204));

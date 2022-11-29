@@ -5,15 +5,15 @@ class Bullet;
 class Sound;
 class CPlayer : public CGameObject
 {
+	//입력시 서버로 바로 전송
 	BOOL R_On, L_On, U_On, D_On;
 	BOOL pressQ, pressSft, onshield;
+
 	UINT effecttime_AoE;
 	UINT effecttime_Shoot;
 	UINT effecttime_Return;
 	UINT castingtime_return;
 	UINT activetime_shield;	
-
-	const INT iAoERadius;
 
 	UINT cooltime_Shoot;
 	UINT cooltime_AoE;
@@ -21,12 +21,18 @@ class CPlayer : public CGameObject
 	UINT cooltime_Return;
 	UINT cooltime_Death;
 
+	POINT worldmousepos;
+
+	//draw데이터
+	const INT iAoERadius;
 
 	POINT triangle1[3];
 	POINT triangle2[3];
+
 	CGameObject*	ptarget;
 	Bullet*			pbullet;
-	POINT worldmousepos;
+
+
 	POINT shootattackpt[7];
 	RECT shootattackrange[7];
 	BOOL immotal;
