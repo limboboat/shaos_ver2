@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="소스 파일\CallBack">
+      <UniqueIdentifier>{a20a23c7-59ec-4a9c-baa4-35d8d7cdd1c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\CallBack">
+      <UniqueIdentifier>{5f9472f5-de05-44ef-8d8c-49334dd93a93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Unit">
+      <UniqueIdentifier>{23c2199c-9eae-4c77-ba9d-c675efa0bf5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{fdec53b2-a860-480f-96b0-3f83c06793d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Player">
+      <UniqueIdentifier>{36459c59-1209-468c-9db3-ae1b79c1f65d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="drawHP">
+      <UniqueIdentifier>{ad618c39-fd12-46bf-8bb0-2bf612f986f1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DodGe.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>소스 파일\CallBack</Filter>
+    </ClCompile>
+    <ClCompile Include="Mouse.cpp">
+      <Filter>소스 파일\CallBack</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyboardUP.cpp">
+      <Filter>소스 파일\CallBack</Filter>
+    </ClCompile>
+    <ClCompile Include="Keyboard.cpp">
+      <Filter>소스 파일\CallBack</Filter>
+    </ClCompile>
+    <ClCompile Include="Draw.cpp">
+      <Filter>소스 파일\CallBack</Filter>
+    </ClCompile>
+    <ClCompile Include="CUnit.cpp">
+      <Filter>Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="CNetwork.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlayer.cpp">
+      <Filter>Player</Filter>
+    </ClCompile>
+    <ClCompile Include="CdrawHP.cpp">
+      <Filter>drawHP</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Header.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Draw.h">
+      <Filter>헤더 파일\CallBack</Filter>
+    </ClInclude>
+    <ClInclude Include="Keyboard.h">
+      <Filter>헤더 파일\CallBack</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardUP.h">
+      <Filter>헤더 파일\CallBack</Filter>
+    </ClInclude>
+    <ClInclude Include="Mouse.h">
+      <Filter>헤더 파일\CallBack</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>헤더 파일\CallBack</Filter>
+    </ClInclude>
+    <ClInclude Include="CUnit.h">
+      <Filter>Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="CNetwork.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlayer.h">
+      <Filter>Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CdrawHP.h">
+      <Filter>drawHP</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="vertex.glsl">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="fragment.glsl">
+      <Filter>리소스 파일</Filter>
+    </None>
+  </ItemGroup>
+</Project>

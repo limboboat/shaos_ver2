@@ -1,0 +1,121 @@
+#include "pch.h"
+#include "CDia.h"
+
+
+CDia::CDia(POINTFLOAT initPos, TEAM team, CGameObject* enemylist)
+	: CUnit(initPos, team, enemylist)
+{
+	mrcRng = { (LONG)mptpos.x - DIA_SHORTRADIUS, (LONG)mptpos.y - DIA_SHORTRADIUS,
+	(LONG)mptpos.x + DIA_SHORTRADIUS, (LONG)mptpos.y + DIA_SHORTRADIUS };
+
+	mhp = new CHp(DIA_MAXHP);
+	mrchpbar = { mrcRng.right + 12, mrcRng.top, mrcRng.right + 15, mrcRng.bottom };
+
+	pattacktarget = menemylist;	// 타겟은 상대편 타워
+
+	iattackcooltime = 0;
+	ideatheffecttime = 0;
+}
+
+
+CDia::~CDia()
+{
+	delete mhp;
+}
+
+void CDia::Draw(HDC hdc)
+{
+}
+
+void CDia::SelectedDraw(HDC hdc, HBRUSH hbr)
+{
+}
+
+void CDia::Move()
+{
+	POINTFLOAT movevector;
+	if (mptpos.x > MAPSIZE_WIDTH / 2) {
+		movevector = { -DIA_SPEED,0 };
+	}
+	else if (mptpos.x > MAPSIZE_WIDTH/6 && mptpos.x <= MAPSIZE_WIDTH / 2) {
+		float movey;
+		if (mptpos.y > MAPSIZE_HEIGHT / 2 && mptpos.y < MAPSIZE_HEIGHT - 50) 
+			movey = DIA_SPEED;
+		else if(mptpos.y < MAPSIZE_HEIGHT / 2 && mptpos.y > 50) 
+			movey = -DIA_SPEED;
+		else movey = 0;
+		movevector = { -DIA_SPEED, movey };
+	}
+	else {
+		float projX = pattacktarget->GetPos().x - mptpos.x;
+		float projY = pattacktarget->GetPos().y - mptpos.y;
+	
+	
+		float distance = sqrt(projX * projX + projY * projY);
+	
+		(distance < pattacktarget->GetObjRadius() + DIA_SHORTRADIUS) 
+			? moveOn = FALSE : moveOn = TRUE;	// 적절한 범위에서 멈추기
+	
+		if (!moveOn) {
+			movevector = { 0,0 };
+			if (!attackOn) attackOn = TRUE;
+		}
+		else {
+			float nomalizedX = projX / distance;
+			float nomalizedY = projY / distance;
+
+			movevector = { nomalizedX * DIA_SPEED,nomalizedY * DIA_SPEED };
+		}
+	}
+
+	// 공격 대상을 향해서 이동
+	mptpos.x += movevector.x;
+	mptpos.y += movevector.y;
+
+	mrcRng = { (LONG)mptpos.x - DIA_SHORTRADIUS, (LONG)mptpos.y - DIA_SHORTRADIUS,
+	(LONG)mptpos.x + DIA_SHORTRADIUS, (LONG)mptpos.y + DIA_SHORTRADIUS };
+
+
+	mrchpbar = {
+	mrcRng.right + 12,
+	mrcRng.bottom - (INT)GETHPBAR(mhp->GetHp(), (DIA_SHORTRADIUS * 2), DIA_MAXHP),
+	mrcRng.right + 15,
+	mrcRng.bottom
+	};
+
+	mrchpbar.left = mrcRng.right + 12;
+	mrchpbar.top = mrcRng.bottom - (INT)GETHPBAR(mhp->GetHp(), (DIA_SHORTRADIUS * 2), DIA_MAXHP);
+	mrchpbar.right = mrcRng.right + 15;
+	mrchpbar.bottom = mrcRng.bottom;
+
+}
+
+void CDia::Attack()
+{
+	// 타워가 앞에 있을 때
+	pattacktarget->PutDamage(DIA_ATTACKDAMAGE);
+}
+
+void CDia::Update()
+{
+	if (ideatheffecttime) {
+		ideatheffecttime -= FRAMETIME;
+		return;
+	}
+
+	Move();
+
+	if (iattackcooltime)
+		iattackcooltime -= FRAMETIME;
+	else {
+		if (attackOn) {
+			Attack();
+			iattackcooltime = FRAMETIME * 50;
+		}
+	}
+}
+
+INT CDia::GetObjRadius()
+{
+	return DIA_SHORTRADIUS;
+}
